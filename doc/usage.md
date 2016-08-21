@@ -15,7 +15,12 @@ registering aurelia-form as a plugin in your aurelia project.
 
 ```
 
-## Model
+See the [configuration](doc/configuration.md) section.
+
+## View Model
+
+This is an aurelia view model. It can be the view model of a component or
+a page.
 
 > page.js
 
@@ -47,6 +52,9 @@ export class Page {
 
 ## View
 
+In this template you can see how to use one of the [components](doc/components.md)
+aurelia-form has to offer.
+
 > page.html
 
 ```html
@@ -62,3 +70,4 @@ export class Page {
 
 ```
 
+If done correctly you should see an HTML form when this component activates.
