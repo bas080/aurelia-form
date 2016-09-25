@@ -9,11 +9,12 @@ export class Conditional {
   }
 
   activate(field) {
+    this.field = field;
     this.model  = field.value;
     this.schema = [];
 
     let calculateSchema = () => {
-      let schema = field.element.schema(this.model);
+      let schema = field.element.schema(field);
 
       if (Array.isArray(schema)) {
         this.schema = schema;
@@ -33,7 +34,7 @@ export class Conditional {
 
     if (typeof this.model === 'object' && field.element.observe) {
       this.observer = this.bindingEngine
-        .propertyObserver(this.model, field.element.observe)
+        .propertyObserver(field.model, field.element.observe)
         .subscribe(calculateSchema);
     }
   }

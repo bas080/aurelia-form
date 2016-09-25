@@ -19,6 +19,7 @@ export function entitySchema(entity) {
 
   let isAssociation = key => Boolean(associations[key]);
 
+
   let isCollectionAssociation = key => associations[key].type === 'collection';
 
   for (let key of Object.keys(entity)) {
@@ -33,14 +34,41 @@ export function entitySchema(entity) {
     };
 
     if (isAssociation(key)) {
-      element.type     = 'association';
-      element.resource = associations[key].entity;
-      element.property = 'name';
-    }
+      let where = element.where || {};
 
-    if (isAssociation(key) && isCollectionAssociation(key)) {
-      element.multiple = true;
-      element.schema   = entitySchema(entityManager.getEntity(key));
+      element.type    = 'computed';
+      element.observe = Object.keys(where);
+      element.schema  = field => {
+        let query = Object.keys(where).reduce((result, attr) => {
+          //make sure the id and not the entity is being used
+          result[attr] = entityId(where[attr](entity));
+
+          return result;
+        }, {});
+
+        let repository = isAssociation(key) ? entityManager.getRepository(associations[key].entity) : undefined;
+
+        return repository.find(query).then(entries => {
+
+          if (isCollectionAssociation(key)) {
+            field.model[key] = field.model[key].map(ent => ent[element.idName || 'id']);
+          } else {
+            field.model[key] = field.model[key][element.idName || 'id'];
+          }
+
+          return [{
+            key: key,
+            type: 'options',
+            multiple: isCollectionAssociation(key),
+            options: entries.map(entry => {
+              return {
+                value: entry[element.idName || 'id'],
+                name: entry[element.name || 'name']
+              };
+            })
+          }];
+        });
+      };
     }
 
     element = extend(true, element, data[key] ? data[key].form || {} : {});
@@ -49,4 +77,13 @@ export function entitySchema(entity) {
   }
 
   return schema;
+}
+
+
+function entityId(entity) {
+  if (typeof entity === 'object' && entity !== null) {
+    entity.getId();
+  }
+
+  return entity;
 }
