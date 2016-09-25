@@ -53,7 +53,7 @@ export function entitySchema(entity) {
           if (isCollectionAssociation(key)) {
             field.model[key] = field.model[key].map(ent => ent[element.idName || 'id']);
           } else {
-            field.model[key] = field.model[key][element.idName || 'id'];
+            field.model[key] = field.model[key] ? field.model[key][element.idName || 'id'] : undefined;
           }
 
           return [{
