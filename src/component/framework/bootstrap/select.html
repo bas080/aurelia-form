@@ -5,6 +5,7 @@
   <form-group element.bind="model.element" message.bind="message" description.bind="description">
     <select
       id="${model.element.id}"
+      multiple.bind="model.element.multiple"
       attributes.bind="model.element.attributes"
       value.bind="model.value"
       class="form-control">

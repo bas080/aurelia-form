@@ -9,11 +9,12 @@ export class Conditional {
   }
 
   activate(field) {
-    this.model  = field.value;
-    this.schema = [];
+    this.field = field;
+    this.schema    = [];
+    this.observers = [];
 
     let calculateSchema = () => {
-      let schema = field.element.schema(this.model);
+      let schema = field.element.schema(field);
 
       if (Array.isArray(schema)) {
         this.schema = schema;
@@ -32,17 +33,23 @@ export class Conditional {
 
     calculateSchema();
 
-    if (typeof this.model === 'object' && field.element.observe) {
-      this.observer = this.bindingEngine
-        .propertyObserver(this.model, field.element.observe)
-        .subscribe(calculateSchema);
+    if (!field.element.observe) {
+      return logger.warn(`${field.element.key} does not have observers`);
     }
+
+    let observe = Array.isArray(field.element.observe)
+      ? field.element.observe
+      : [field.element.observe];
+
+    this.observers = observe.map(prop => {
+      return this.bindingEngine
+        .propertyObserver(field.model, prop)
+        .subscribe(calculateSchema.bind(this));
+    });
   }
 
   deactivate() {
-    if (this.observer) {
-      this.observer.dispose();
-    }
+    this.observers && this.observers.map(observer => observer.dispose());
   }
 
 }
