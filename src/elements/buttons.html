@@ -1,0 +1,11 @@
+<template bindable="input">
+
+  <button repeat.for="button of input.buttons"
+    show.bind="!button.hidden"
+    disabled.bind="button.disabled"
+    click.delegate="button.action()" type="button" class="btn btn-${button.type || 'default'}">
+    <span if.bind="button.icon" class="fa fa-${button.icon}"></span>
+    <span if.bind="button.text" t.bind="button.text">${button.text}</span>
+  </button>
+
+</template>

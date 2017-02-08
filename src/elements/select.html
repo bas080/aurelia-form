@@ -1,0 +1,11 @@
+<template>
+
+  <select
+    class="form-control"
+    value.bind="input.value">
+
+    <option repeat.for="option of input.options" t.bind="option.name" model.bind="option.value">${option.name}</option>
+
+  </select>
+
+</template>

@@ -1,0 +1,15 @@
+<template>
+
+  <div class="form-group" if.bind="visible()">
+
+    <label if.bind="group.label" class="control-label col-md-4 col-sm-12">
+      ${group.label.name}
+    </label>
+
+    <div class="${group.label ? '' : 'col-md-offset-4 col-xs-offset-0'} col-md-8 col-sm-12">
+      <slot></slot>
+    </div>
+
+  </div>
+
+</template>

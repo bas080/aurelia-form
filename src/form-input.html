@@ -1,0 +1,16 @@
+<template>
+
+  <compose
+    containerless
+    if.bind="isViewOnlyInputElement"
+    view.bind="elementPath"
+    ></compose>
+
+  <compose
+    containerless
+    if.bind="!isViewOnlyInputElement"
+    model.bind="input"
+    view-model.bind="elementPath"
+    ></compose>
+
+</template>

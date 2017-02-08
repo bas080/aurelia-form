@@ -1,0 +1,7 @@
+<template>
+  <button click.delegate="input.action()" type="button" class="btn btn-${input.type || 'default'}">
+    <span if.bind="input.icon" class="fa fa-${input.icon}"></span>
+    <span if.bind="input.text" t.bind="input.text">${input.text}</span>
+  </button>
+</template>
+
